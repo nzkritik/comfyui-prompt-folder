@@ -31,6 +31,30 @@ function syncControl(node, mode) {
   node.setDirtyCanvas?.(true, true);
 }
 
+// In sequence mode the seed is the position in the file list, so a seed
+// carried over from random mode (a huge number) or from another folder would
+// start the sequence part-way through. Start it at the first file instead.
+// Only on a change made in the UI: a loaded workflow, or a seed typed in by
+// hand, keeps its value, so a sequence can still be resumed.
+function restartSequence(node) {
+  const mode = node.widgets?.find((w) => w.name === "mode");
+  const seed = node.widgets?.find((w) => w.name === "seed");
+  if (!seed || mode?.value !== "sequence" || seed.value === 0) return;
+  seed.value = 0;
+  node.setDirtyCanvas?.(true, true);
+}
+
+function afterChange(node, name, fn) {
+  const w = node.widgets?.find((x) => x.name === name);
+  if (!w) return;
+  const original = w.callback;
+  w.callback = function (value, ...rest) {
+    const result = original?.call(this, value, ...rest);
+    fn(value);
+    return result;
+  };
+}
+
 function shownWidget(node) {
   let w = node.widgets?.find((x) => x.name === SHOWN);
   if (w) return w;
@@ -69,12 +93,12 @@ app.registerExtension({
     node.setSize([Math.max(node.size[0], 380), node.size[1] + 110]);
     const mode = node.widgets?.find((w) => w.name === "mode");
     if (!mode) return;
-    const original = mode.callback;
-    mode.callback = function (value, ...rest) {
-      const result = original?.call(this, value, ...rest);
+    afterChange(node, "mode", (value) => {
       syncControl(node, value);
-      return result;
-    };
+      restartSequence(node);
+    });
+    afterChange(node, "folder", () => restartSequence(node));
+    afterChange(node, "include_subfolders", () => restartSequence(node));
     // A node just added gets the default mode's control; a loaded one is
     // configured after this and keeps its saved value.
     syncControl(node, mode.value);

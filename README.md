@@ -15,6 +15,12 @@ or in sequence**, and shows you which prompt it picked.
 The seed's **control after generate** follows the mode by itself: `sequence`
 sets it to *increment* (the next file every run) and `random` to *randomize*.
 
+In `sequence` mode the seed is the position in the list, starting at 0. It goes
+back to 0, the first file, whenever you switch the mode to `sequence`, pick
+another folder, or toggle `include_subfolders`, so a sequence never starts part
+way through a folder. A seed you type in yourself, or one saved in a workflow,
+is kept, so you can resume a sequence where you left off.
+
 | Output | |
 | --- | --- |
 | `prompt` | The file's text, ready for a CLIP Text Encode node's `text` input. |
@@ -68,7 +74,7 @@ dependencies.
 
 ```bash
 uvx pytest -q tests                          # the folder/pick/read logic, no ComfyUI needed
-python tests/ui_check.py examples sequence 1 # against a running ComfyUI; needs aiohttp
+python tests/ui_check.py examples sequence 1 # against a running, idle ComfyUI; needs aiohttp
 ```
 
 `ui_check.py` drives the real frontend in headless Chromium, and blocks writes

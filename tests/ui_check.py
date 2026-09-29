@@ -51,7 +51,47 @@ CONTROL_JS = """(() => {
 })()"""
 
 
+# The bug found 2026-09-30: after random mode the seed was huge, and switching
+# to sequence kept it, so an 8-file folder started at file 3 (seed % 8 == 2).
+RESTART_JS = """(async () => {
+  // queuePrompt sends the whole canvas, so start from an empty one
+  app.graph.clear();
+  const n = LiteGraph.createNode("PromptFromFolder"); app.graph.add(n);
+  const w = (name) => n.widgets.find(x => x.name === name);
+  const set = (name, v) => { w(name).value = v; w(name).callback?.(v); };
+  const folders = w("folder").options.values;
+  const other = folders.find(f => f !== "examples" && f !== "(root)") || folders[0];
+  const out = {};
+  set("folder", "examples");
+  set("mode", "random"); w("seed").value = 408696336161729;
+  set("mode", "sequence"); out.random_to_sequence = w("seed").value;
+  w("seed").value = 5; set("folder", other); out.folder_change = w("seed").value;
+  w("seed").value = 5; set("include_subfolders", true); out.subfolders_toggle = w("seed").value;
+  set("include_subfolders", false);
+  set("mode", "random"); w("seed").value = 777; set("folder", "examples"); out.random_folder_change_keeps = w("seed").value;
+  // a real run straight after switching from random: must take the first file
+  w("seed").value = 408696336161729; set("mode", "sequence"); set("folder", "examples");
+  const p = LiteGraph.createNode("PreviewAny"); app.graph.add(p); n.connect(0, p, 0);
+  const shown = w("selected"); shown.value = "";
+  await app.queuePrompt(0, 1);
+  for (let i = 0; i < 100 && !shown.value; i++) await new Promise(r => setTimeout(r, 200));
+  out.first_run_picks = shown.value.split("\\n")[0];
+  out.seed_after_run = w("seed").value;
+  app.graph.remove(p); app.graph.remove(n);
+  return JSON.stringify(out);
+})()"""
+
+
+def queue_is_empty():
+    import urllib.request
+    q = json.load(urllib.request.urlopen(URL + "/queue", timeout=10))
+    return not q["queue_running"] and not q["queue_pending"]
+
+
 async def main():
+    # This queues real (tiny) prompts; never mix them into someone's work.
+    if not queue_is_empty():
+        sys.exit("ComfyUI's queue is busy; run this when nothing is queued.")
     prof = tempfile.mkdtemp(prefix="cdp-")
     proc = subprocess.Popen(["chromium", "--headless=new", "--remote-debugging-port=9334", f"--user-data-dir={prof}",
                              "--window-size=1600,1000", "--no-first-run", "about:blank"],
@@ -107,6 +147,7 @@ async def main():
                     await asyncio.sleep(0.5)
                 await asyncio.sleep(2)
                 print("seed control follows mode:", await ev(CONTROL_JS))
+                print("sequence restarts at the first file:", await ev(RESTART_JS))
                 r = json.loads(await ev(JS))
                 print("display box present:", r["has_box"], "| read-only:", r["readonly"])
                 print("inputs sent with the prompt:", r["sent"])
