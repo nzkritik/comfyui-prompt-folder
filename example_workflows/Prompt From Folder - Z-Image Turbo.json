@@ -331,9 +331,9 @@
       "widgets_values": [
         "examples",
         false,
-        "random",
-        216739990542493,
-        "randomize"
+        "sequence",
+        0,
+        "increment"
       ],
       "widgets_values_named": {
         "folder": "examples",
