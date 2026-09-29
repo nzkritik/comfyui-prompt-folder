@@ -37,6 +37,18 @@ with the prompt and is not saved with the workflow.
 If you edit a prompt file, the node notices and runs again, even with a fixed
 seed.
 
+## Example workflow
+
+`example_workflows/Prompt From Folder - Z-Image Turbo.json` is ComfyUI's standard
+**Z-Image Turbo** template, unchanged, with its prompt coming from Prompt From Folder.
+
+1. Copy `example_prompts/` to `ComfyUI/input/prompts/examples/`.
+2. Load the workflow and press **R** so the folder list includes `examples`.
+3. Run it. In `sequence` mode each run takes the next prompt.
+
+It uses the template's own model files (`z_image_turbo_bf16`, `qwen_3_4b`, `ae`).
+Download links are in the workflow's model note.
+
 ## Safety
 
 ComfyUI is often reachable from other machines on the network, so the node
