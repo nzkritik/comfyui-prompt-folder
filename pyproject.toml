@@ -1,0 +1,16 @@
+[project]
+name = "comfyui-prompt-folder"
+description = "Load prompts from a folder of .txt files in ComfyUI, at random or in sequence, and see which one was picked."
+version = "0.1.0"
+license = { file = "LICENSE" }
+requires-python = ">=3.10"
+dependencies = []
+classifiers = [
+    "Operating System :: OS Independent",
+]
+
+[tool.comfy]
+PublisherId = "nzkritik"
+DisplayName = "Prompt Folder"
+# V3 node API: custom-node comfy_entrypoint arrived in 0.3.48.
+requires-comfyui = ">=0.3.48"
