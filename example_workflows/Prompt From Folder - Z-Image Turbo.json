@@ -12,8 +12,8 @@
         199.99998755061938
       ],
       "size": [
-        510,
-        771.953125
+        510.81710177667435,
+        462.2818430515838
       ],
       "flags": {
         "collapsed": false
@@ -23,10 +23,19 @@
       "inputs": [],
       "outputs": [],
       "title": "Model link",
-      "properties": {},
+      "properties": {
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "version": "7.8",
+          "input_ue_unconnectable": {}
+        }
+      },
       "widgets_values": [
-        "## Report workflow issue\n\nIf you found any issues when running this workflow, [report template issue here](https://github.com/Comfy-Org/workflow_templates/issues)\n\n\n## Model links\n\n**text_encoders**\n\n- [qwen_3_4b.safetensors](https://huggingface.co/Comfy-Org/z_image_turbo/resolve/main/split_files/text_encoders/qwen_3_4b.safetensors)\n\n**diffusion_models**\n\n- [z_image_turbo_bf16.safetensors](https://huggingface.co/Comfy-Org/z_image_turbo/resolve/main/split_files/diffusion_models/z_image_turbo_bf16.safetensors)\n\n**vae**\n\n- [ae.safetensors](https://huggingface.co/Comfy-Org/z_image_turbo/resolve/main/split_files/vae/ae.safetensors)\n\n\nModel Storage Location\n\n```\n\ud83d\udcc2 ComfyUI/\n\u251c\u2500\u2500 \ud83d\udcc2 models/\n\u2502   \u251c\u2500\u2500 \ud83d\udcc2 text_encoders/\n\u2502   \u2502      \u2514\u2500\u2500 qwen_3_4b.safetensors\n\u2502   \u251c\u2500\u2500 \ud83d\udcc2 diffusion_models/\n\u2502   \u2502      \u2514\u2500\u2500 z_image_turbo_bf16.safetensors\n\u2502   \u2514\u2500\u2500 \ud83d\udcc2 vae/\n\u2502          \u2514\u2500\u2500 ae.safetensors\n```\n"
+        "## Model links\n\n**text_encoders**\n\n- [qwen_3_4b.safetensors](https://huggingface.co/Comfy-Org/z_image_turbo/resolve/main/split_files/text_encoders/qwen_3_4b.safetensors)\n\n**diffusion_models**\n\n- [z_image_turbo_bf16.safetensors](https://huggingface.co/Comfy-Org/z_image_turbo/resolve/main/split_files/diffusion_models/z_image_turbo_bf16.safetensors)\n\n**vae**\n\n- [ae.safetensors](https://huggingface.co/Comfy-Org/z_image_turbo/resolve/main/split_files/vae/ae.safetensors)\n\n\nModel Storage Location\n\n```\n📂 ComfyUI/\n├── 📂 models/\n│   ├── 📂 text_encoders/\n│   │      └── qwen_3_4b.safetensors\n│   ├── 📂 diffusion_models/\n│   │      └── z_image_turbo_bf16.safetensors\n│   └── 📂 vae/\n│          └── ae.safetensors\n```\n"
       ],
+      "widgets_values_named": {
+        "text": "## Model links\n\n**text_encoders**\n\n- [qwen_3_4b.safetensors](https://huggingface.co/Comfy-Org/z_image_turbo/resolve/main/split_files/text_encoders/qwen_3_4b.safetensors)\n\n**diffusion_models**\n\n- [z_image_turbo_bf16.safetensors](https://huggingface.co/Comfy-Org/z_image_turbo/resolve/main/split_files/diffusion_models/z_image_turbo_bf16.safetensors)\n\n**vae**\n\n- [ae.safetensors](https://huggingface.co/Comfy-Org/z_image_turbo/resolve/main/split_files/vae/ae.safetensors)\n\n\nModel Storage Location\n\n```\n📂 ComfyUI/\n├── 📂 models/\n│   ├── 📂 text_encoders/\n│   │      └── qwen_3_4b.safetensors\n│   ├── 📂 diffusion_models/\n│   │      └── z_image_turbo_bf16.safetensors\n│   └── 📂 vae/\n│          └── ae.safetensors\n```\n"
+      },
       "color": "#222",
       "bgcolor": "#000"
     },
@@ -34,39 +43,64 @@
       "id": 9,
       "type": "SaveImage",
       "pos": [
-        569.9998957637683,
-        199.99998755061938
+        560.1950371365804,
+        -283.7081584088097
       ],
       "size": [
-        780,
-        660
+        938.5125763009364,
+        940.2565247204006
       ],
       "flags": {},
-      "order": 2,
+      "order": 4,
       "mode": 0,
       "inputs": [
         {
+          "localized_name": "images",
           "name": "images",
           "type": "IMAGE",
           "link": 62
+        },
+        {
+          "localized_name": "filename_prefix",
+          "name": "filename_prefix",
+          "type": "STRING",
+          "widget": {
+            "name": "filename_prefix"
+          },
+          "link": null
         }
       ],
-      "outputs": [],
+      "outputs": [
+        {
+          "localized_name": "images",
+          "name": "images",
+          "type": "IMAGE",
+          "links": null
+        }
+      ],
       "properties": {
-        "Node name for S&R": "SaveImage",
         "cnr_id": "comfy-core",
         "ver": "0.3.64",
+        "Node name for S&R": "SaveImage",
         "enableTabs": false,
         "tabWidth": 65,
         "tabXOffset": 10,
         "hasSecondTab": false,
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
-        "secondTabWidth": 65
+        "secondTabWidth": 65,
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "version": "7.8",
+          "input_ue_unconnectable": {}
+        }
       },
       "widgets_values": [
         "z-image-turbo"
-      ]
+      ],
+      "widgets_values_named": {
+        "filename_prefix": "z-image-turbo"
+      }
     },
     {
       "id": 57,
@@ -80,7 +114,7 @@
         470
       ],
       "flags": {},
-      "order": 1,
+      "order": 3,
       "mode": 0,
       "inputs": [
         {
@@ -91,10 +125,67 @@
             "name": "text"
           },
           "link": 76
+        },
+        {
+          "name": "width",
+          "type": "INT",
+          "widget": {
+            "name": "width"
+          },
+          "link": null
+        },
+        {
+          "name": "height",
+          "type": "INT",
+          "widget": {
+            "name": "height"
+          },
+          "link": null
+        },
+        {
+          "name": "seed",
+          "type": "INT",
+          "widget": {
+            "name": "seed"
+          },
+          "link": null
+        },
+        {
+          "name": "steps",
+          "type": "INT",
+          "widget": {
+            "name": "steps"
+          },
+          "link": null
+        },
+        {
+          "name": "unet_name",
+          "type": "COMBO",
+          "widget": {
+            "name": "unet_name"
+          },
+          "link": null
+        },
+        {
+          "name": "clip_name",
+          "type": "COMBO",
+          "widget": {
+            "name": "clip_name"
+          },
+          "link": null
+        },
+        {
+          "name": "vae_name",
+          "type": "COMBO",
+          "widget": {
+            "name": "vae_name"
+          },
+          "link": null
         }
       ],
       "outputs": [
         {
+          "localized_name": "IMAGE",
           "name": "IMAGE",
           "type": "IMAGE",
           "links": [
@@ -103,44 +194,6 @@
         }
       ],
       "properties": {
-        "proxyWidgets": [
-          [
-            "27",
-            "text"
-          ],
-          [
-            "13",
-            "width"
-          ],
-          [
-            "13",
-            "height"
-          ],
-          [
-            "3",
-            "seed"
-          ],
-          [
-            "3",
-            "steps"
-          ],
-          [
-            "28",
-            "unet_name"
-          ],
-          [
-            "30",
-            "clip_name"
-          ],
-          [
-            "29",
-            "vae_name"
-          ],
-          [
-            "3",
-            "control_after_generate"
-          ]
-        ],
         "cnr_id": "comfy-core",
         "ver": "0.3.73",
         "enableTabs": false,
@@ -149,9 +202,52 @@
         "hasSecondTab": false,
         "secondTabText": "Send Back",
         "secondTabOffset": 80,
-        "secondTabWidth": 65
+        "secondTabWidth": 65,
+        "proxyWidgetErrorQuarantine": [
+          {
+            "originalEntry": [
+              "3",
+              "control_after_generate"
+            ],
+            "reason": "missingSubgraphInput",
+            "attemptedAtVersion": 1
+          }
+        ],
+        "ue_properties": {
+          "widget_ue_connectable": {
+            "text": true
+          },
+          "version": "7.8",
+          "input_ue_unconnectable": {}
+        },
+        "previewExposures": [
+          {
+            "name": "$$canvas-image-preview",
+            "sourceNodeId": "3",
+            "sourcePreviewName": "$$canvas-image-preview"
+          }
+        ]
       },
-      "widgets_values": []
+      "widgets_values": [
+        "Latina female with thick wavy hair, harbor boats and pastel houses behind. Breezy seaside light, warm tones, cinematic close-up. ",
+        1024,
+        1024,
+        112910295805435,
+        8,
+        "z_image_turbo_bf16.safetensors",
+        "qwen_3_4b.safetensors",
+        "ae.safetensors"
+      ],
+      "widgets_values_named": {
+        "text": "Latina female with thick wavy hair, harbor boats and pastel houses behind. Breezy seaside light, warm tones, cinematic close-up. ",
+        "width": 1024,
+        "height": 1024,
+        "seed": 112910295805435,
+        "steps": 8,
+        "unet_name": "z_image_turbo_bf16.safetensors",
+        "clip_name": "qwen_3_4b.safetensors",
+        "vae_name": "ae.safetensors"
+      }
     },
     {
       "id": 62,
@@ -165,36 +261,87 @@
         430
       ],
       "flags": {},
-      "order": 0,
+      "order": 1,
       "mode": 0,
-      "inputs": [],
-      "outputs": [
+      "inputs": [
         {
-          "name": "prompt",
-          "type": "STRING",
-          "links": [
-            76
-          ],
-          "slot_index": 0
+          "localized_name": "folder",
+          "name": "folder",
+          "type": "COMBO",
+          "widget": {
+            "name": "folder"
+          },
+          "link": null
         },
         {
+          "localized_name": "include_subfolders",
+          "name": "include_subfolders",
+          "type": "BOOLEAN",
+          "widget": {
+            "name": "include_subfolders"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "mode",
+          "name": "mode",
+          "type": "COMBO",
+          "widget": {
+            "name": "mode"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "seed",
+          "name": "seed",
+          "type": "INT",
+          "widget": {
+            "name": "seed"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "prompt",
+          "name": "prompt",
+          "type": "STRING",
+          "slot_index": 0,
+          "links": [
+            76
+          ]
+        },
+        {
+          "localized_name": "file",
           "name": "file",
           "type": "STRING",
-          "links": [],
-          "slot_index": 1
+          "slot_index": 1,
+          "links": []
         }
       ],
       "properties": {
         "Node name for S&R": "PromptFromFolder",
-        "cnr_id": "comfyui-prompt-folder"
+        "cnr_id": "comfyui-prompt-folder",
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "version": "7.8",
+          "input_ue_unconnectable": {}
+        }
       },
       "widgets_values": [
         "examples",
         false,
-        "sequence",
-        0,
-        "increment"
-      ]
+        "random",
+        216739990542493,
+        "randomize"
+      ],
+      "widgets_values_named": {
+        "folder": "examples",
+        "include_subfolders": false,
+        "mode": "random",
+        "seed": 216739990542493,
+        "control_after_generate": "randomize"
+      }
     },
     {
       "id": 63,
@@ -208,17 +355,26 @@
         430
       ],
       "flags": {},
-      "order": 0,
+      "order": 2,
       "mode": 0,
-      "title": "Prompt From Folder",
       "inputs": [],
       "outputs": [],
-      "properties": {},
-      "color": "#432",
-      "bgcolor": "#653",
+      "title": "Prompt From Folder",
+      "properties": {
+        "ue_properties": {
+          "widget_ue_connectable": {},
+          "version": "7.8",
+          "input_ue_unconnectable": {}
+        }
+      },
       "widgets_values": [
         "## Prompt From Folder\n\nComfyUI's standard **Z-Image Turbo** template, with its prompt coming from **Prompt From Folder**.\n\n1. Copy this repo's `example_prompts/` folder to **`ComfyUI/input/prompts/examples/`**\n   (or put your own `.txt` prompts in any folder under `input/prompts/`, one prompt per file).\n2. Press **R** to refresh, then pick the folder in the node.\n3. **Run**. In `sequence` mode each run takes the next file; switch `mode` to `random` for a seeded random pick.\n   The box on the node shows which file and prompt were used.\n\nThe model files are the template's own; see the note below for where to download them."
-      ]
+      ],
+      "widgets_values_named": {
+        "text": "## Prompt From Folder\n\nComfyUI's standard **Z-Image Turbo** template, with its prompt coming from **Prompt From Folder**.\n\n1. Copy this repo's `example_prompts/` folder to **`ComfyUI/input/prompts/examples/`**\n   (or put your own `.txt` prompts in any folder under `input/prompts/`, one prompt per file).\n2. Press **R** to refresh, then pick the folder in the node.\n3. **Run**. In `sequence` mode each run takes the next file; switch `mode` to `random` for a seeded random pick.\n   The box on the node shows which file and prompt were used.\n\nThe model files are the template's own; see the note below for where to download them."
+      },
+      "color": "#432",
+      "bgcolor": "#653"
     }
   ],
   "links": [
@@ -247,8 +403,8 @@
         "version": 1,
         "state": {
           "lastGroupId": 4,
-          "lastNodeId": 61,
-          "lastLinkId": 75,
+          "lastNodeId": 63,
+          "lastLinkId": 76,
           "lastRerouteId": 0
         },
         "revision": 0,
@@ -411,6 +567,25 @@
                   "name": "clip_name"
                 },
                 "link": 74
+              },
+              {
+                "localized_name": "type",
+                "name": "type",
+                "type": "COMBO",
+                "widget": {
+                  "name": "type"
+                },
+                "link": null
+              },
+              {
+                "localized_name": "device",
+                "name": "device",
+                "shape": 7,
+                "type": "COMBO",
+                "widget": {
+                  "name": "device"
+                },
+                "link": null
               }
             ],
             "outputs": [
@@ -424,9 +599,9 @@
               }
             ],
             "properties": {
-              "Node name for S&R": "CLIPLoader",
               "cnr_id": "comfy-core",
               "ver": "0.3.73",
+              "Node name for S&R": "CLIPLoader",
               "models": [
                 {
                   "name": "qwen_3_4b.safetensors",
@@ -440,13 +615,23 @@
               "hasSecondTab": false,
               "secondTabText": "Send Back",
               "secondTabOffset": 80,
-              "secondTabWidth": 65
+              "secondTabWidth": 65,
+              "ue_properties": {
+                "widget_ue_connectable": {},
+                "version": "7.8",
+                "input_ue_unconnectable": {}
+              }
             },
             "widgets_values": [
               "qwen_3_4b.safetensors",
               "lumina2",
               "default"
-            ]
+            ],
+            "widgets_values_named": {
+              "clip_name": "qwen_3_4b.safetensors",
+              "type": "lumina2",
+              "device": "default"
+            }
           },
           {
             "id": 29,
@@ -484,9 +669,9 @@
               }
             ],
             "properties": {
-              "Node name for S&R": "VAELoader",
               "cnr_id": "comfy-core",
               "ver": "0.3.73",
+              "Node name for S&R": "VAELoader",
               "models": [
                 {
                   "name": "ae.safetensors",
@@ -500,11 +685,19 @@
               "hasSecondTab": false,
               "secondTabText": "Send Back",
               "secondTabOffset": 80,
-              "secondTabWidth": 65
+              "secondTabWidth": 65,
+              "ue_properties": {
+                "widget_ue_connectable": {},
+                "version": "7.8",
+                "input_ue_unconnectable": {}
+              }
             },
             "widgets_values": [
               "ae.safetensors"
-            ]
+            ],
+            "widgets_values_named": {
+              "vae_name": "ae.safetensors"
+            }
           },
           {
             "id": 33,
@@ -539,18 +732,22 @@
               }
             ],
             "properties": {
-              "Node name for S&R": "ConditioningZeroOut",
               "cnr_id": "comfy-core",
               "ver": "0.3.73",
+              "Node name for S&R": "ConditioningZeroOut",
               "enableTabs": false,
               "tabWidth": 65,
               "tabXOffset": 10,
               "hasSecondTab": false,
               "secondTabText": "Send Back",
               "secondTabOffset": 80,
-              "secondTabWidth": 65
-            },
-            "widgets_values": []
+              "secondTabWidth": 65,
+              "ue_properties": {
+                "widget_ue_connectable": {},
+                "version": "7.8",
+                "input_ue_unconnectable": {}
+              }
+            }
           },
           {
             "id": 8,
@@ -592,18 +789,22 @@
               }
             ],
             "properties": {
-              "Node name for S&R": "VAEDecode",
               "cnr_id": "comfy-core",
               "ver": "0.3.64",
+              "Node name for S&R": "VAEDecode",
               "enableTabs": false,
               "tabWidth": 65,
               "tabXOffset": 10,
               "hasSecondTab": false,
               "secondTabText": "Send Back",
               "secondTabOffset": 80,
-              "secondTabWidth": 65
-            },
-            "widgets_values": []
+              "secondTabWidth": 65,
+              "ue_properties": {
+                "widget_ue_connectable": {},
+                "version": "7.8",
+                "input_ue_unconnectable": {}
+              }
+            }
           },
           {
             "id": 28,
@@ -628,6 +829,15 @@
                   "name": "unet_name"
                 },
                 "link": 73
+              },
+              {
+                "localized_name": "weight_dtype",
+                "name": "weight_dtype",
+                "type": "COMBO",
+                "widget": {
+                  "name": "weight_dtype"
+                },
+                "link": null
               }
             ],
             "outputs": [
@@ -641,9 +851,9 @@
               }
             ],
             "properties": {
-              "Node name for S&R": "UNETLoader",
               "cnr_id": "comfy-core",
               "ver": "0.3.73",
+              "Node name for S&R": "UNETLoader",
               "models": [
                 {
                   "name": "z_image_turbo_bf16.safetensors",
@@ -657,12 +867,21 @@
               "hasSecondTab": false,
               "secondTabText": "Send Back",
               "secondTabOffset": 80,
-              "secondTabWidth": 65
+              "secondTabWidth": 65,
+              "ue_properties": {
+                "widget_ue_connectable": {},
+                "version": "7.8",
+                "input_ue_unconnectable": {}
+              }
             },
             "widgets_values": [
               "z_image_turbo_bf16.safetensors",
               "default"
-            ]
+            ],
+            "widgets_values_named": {
+              "unet_name": "z_image_turbo_bf16.safetensors",
+              "weight_dtype": "default"
+            }
           },
           {
             "id": 27,
@@ -707,20 +926,28 @@
               }
             ],
             "properties": {
-              "Node name for S&R": "CLIPTextEncode",
               "cnr_id": "comfy-core",
               "ver": "0.3.73",
+              "Node name for S&R": "CLIPTextEncode",
               "enableTabs": false,
               "tabWidth": 65,
               "tabXOffset": 10,
               "hasSecondTab": false,
               "secondTabText": "Send Back",
               "secondTabOffset": 80,
-              "secondTabWidth": 65
+              "secondTabWidth": 65,
+              "ue_properties": {
+                "widget_ue_connectable": {},
+                "version": "7.8",
+                "input_ue_unconnectable": {}
+              }
             },
             "widgets_values": [
               "Latina female with thick wavy hair, harbor boats and pastel houses behind. Breezy seaside light, warm tones, cinematic close-up. "
-            ]
+            ],
+            "widgets_values_named": {
+              "text": "Latina female with thick wavy hair, harbor boats and pastel houses behind. Breezy seaside light, warm tones, cinematic close-up. "
+            }
           },
           {
             "id": 13,
@@ -754,6 +981,15 @@
                   "name": "height"
                 },
                 "link": 36
+              },
+              {
+                "localized_name": "batch_size",
+                "name": "batch_size",
+                "type": "INT",
+                "widget": {
+                  "name": "batch_size"
+                },
+                "link": null
               }
             ],
             "outputs": [
@@ -768,22 +1004,32 @@
               }
             ],
             "properties": {
-              "Node name for S&R": "EmptySD3LatentImage",
               "cnr_id": "comfy-core",
               "ver": "0.3.64",
+              "Node name for S&R": "EmptySD3LatentImage",
               "enableTabs": false,
               "tabWidth": 65,
               "tabXOffset": 10,
               "hasSecondTab": false,
               "secondTabText": "Send Back",
               "secondTabOffset": 80,
-              "secondTabWidth": 65
+              "secondTabWidth": 65,
+              "ue_properties": {
+                "widget_ue_connectable": {},
+                "version": "7.8",
+                "input_ue_unconnectable": {}
+              }
             },
             "widgets_values": [
               1024,
               1024,
               1
-            ]
+            ],
+            "widgets_values_named": {
+              "width": 1024,
+              "height": 1024,
+              "batch_size": 1
+            }
           },
           {
             "id": 11,
@@ -805,6 +1051,25 @@
                 "name": "model",
                 "type": "MODEL",
                 "link": 26
+              },
+              {
+                "localized_name": "shift",
+                "name": "shift",
+                "type": "FLOAT",
+                "widget": {
+                  "name": "shift"
+                },
+                "link": null
+              },
+              {
+                "localized_name": "sampling",
+                "name": "sampling",
+                "shape": 7,
+                "type": "COMBO",
+                "widget": {
+                  "name": "sampling"
+                },
+                "link": null
               }
             ],
             "outputs": [
@@ -819,20 +1084,30 @@
               }
             ],
             "properties": {
-              "Node name for S&R": "ModelSamplingAuraFlow",
               "cnr_id": "comfy-core",
               "ver": "0.3.64",
+              "Node name for S&R": "ModelSamplingAuraFlow",
               "enableTabs": false,
               "tabWidth": 65,
               "tabXOffset": 10,
               "hasSecondTab": false,
               "secondTabText": "Send Back",
               "secondTabOffset": 80,
-              "secondTabWidth": 65
+              "secondTabWidth": 65,
+              "ue_properties": {
+                "widget_ue_connectable": {},
+                "version": "7.8",
+                "input_ue_unconnectable": {}
+              }
             },
             "widgets_values": [
-              3
-            ]
+              3,
+              "flow"
+            ],
+            "widgets_values_named": {
+              "shift": 3,
+              "sampling": "flow"
+            }
           },
           {
             "id": 3,
@@ -890,6 +1165,42 @@
                   "name": "steps"
                 },
                 "link": 72
+              },
+              {
+                "localized_name": "cfg",
+                "name": "cfg",
+                "type": "FLOAT",
+                "widget": {
+                  "name": "cfg"
+                },
+                "link": null
+              },
+              {
+                "localized_name": "sampler_name",
+                "name": "sampler_name",
+                "type": "COMBO",
+                "widget": {
+                  "name": "sampler_name"
+                },
+                "link": null
+              },
+              {
+                "localized_name": "scheduler",
+                "name": "scheduler",
+                "type": "COMBO",
+                "widget": {
+                  "name": "scheduler"
+                },
+                "link": null
+              },
+              {
+                "localized_name": "denoise",
+                "name": "denoise",
+                "type": "FLOAT",
+                "widget": {
+                  "name": "denoise"
+                },
+                "link": null
               }
             ],
             "outputs": [
@@ -904,16 +1215,21 @@
               }
             ],
             "properties": {
-              "Node name for S&R": "KSampler",
               "cnr_id": "comfy-core",
               "ver": "0.3.64",
+              "Node name for S&R": "KSampler",
               "enableTabs": false,
               "tabWidth": 65,
               "tabXOffset": 10,
               "hasSecondTab": false,
               "secondTabText": "Send Back",
               "secondTabOffset": 80,
-              "secondTabWidth": 65
+              "secondTabWidth": 65,
+              "ue_properties": {
+                "widget_ue_connectable": {},
+                "version": "7.8",
+                "input_ue_unconnectable": {}
+              }
             },
             "widgets_values": [
               0,
@@ -923,7 +1239,16 @@
               "res_multistep",
               "simple",
               1
-            ]
+            ],
+            "widgets_values_named": {
+              "seed": 0,
+              "control_after_generate": "randomize",
+              "steps": 8,
+              "cfg": 1,
+              "sampler_name": "res_multistep",
+              "scheduler": "simple",
+              "denoise": 1
+            }
           }
         ],
         "groups": [
@@ -937,7 +1262,6 @@
               280
             ],
             "color": "#3f789e",
-            "font_size": 24,
             "flags": {}
           },
           {
@@ -950,7 +1274,6 @@
               970
             ],
             "color": "#3f789e",
-            "font_size": 24,
             "flags": {}
           },
           {
@@ -963,7 +1286,6 @@
               660
             ],
             "color": "#3f789e",
-            "font_size": 24,
             "flags": {}
           }
         ],
@@ -1114,7 +1436,9 @@
           }
         ],
         "extra": {
-          "workflowRendererVersion": "LG"
+          "workflowRendererVersion": "LG",
+          "ue_links": [],
+          "links_added_by_ue": []
         }
       }
     ]
@@ -1124,8 +1448,8 @@
     "ds": {
       "scale": 0.6731331717151416,
       "offset": [
-        841.4738691917171,
-        312.8272327558304
+        649.4614348089111,
+        545.6934865471884
       ]
     },
     "frontendVersion": "1.42.15",
@@ -1133,7 +1457,9 @@
     "VHS_latentpreview": false,
     "VHS_latentpreviewrate": 0,
     "VHS_MetadataImage": true,
-    "VHS_KeepIntermediate": true
+    "VHS_KeepIntermediate": true,
+    "ue_links": [],
+    "links_added_by_ue": []
   },
   "version": 0.4
 }
