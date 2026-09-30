@@ -110,3 +110,18 @@ NODES = [PromptFromFolder, PromptToFolder]
 @PromptServer.instance.routes.get("/prompt_folder/dirs")
 async def list_prompt_dirs(request):
     return web.json_response({"root": "input/prompts", "dirs": saving.list_dirs(prompts_root())})
+
+
+# How many prompt files Prompt From Folder would choose from, so the node can
+# show it before a run. The folder goes through the same check as the node:
+# anything that is not a listed prompt folder is refused, never looked up.
+@PromptServer.instance.routes.get("/prompt_folder/count")
+async def count_prompts(request):
+    folder = request.query.get("folder", prompts.ROOT_FOLDER)
+    subfolders = request.query.get("subfolders", "").lower() in ("1", "true", "yes")
+    try:
+        files = prompts.prompt_files(prompts_root(), folder, subfolders)
+    except ValueError:
+        # No server paths in the reply; the route is reachable from the LAN.
+        return web.json_response({"error": f"'{folder}' is not a prompt folder under input/prompts"}, status=400)
+    return web.json_response({"folder": folder, "subfolders": subfolders, "count": len(files)})

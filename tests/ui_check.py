@@ -88,6 +88,26 @@ def queue_is_empty():
     return not q["queue_running"] and not q["queue_pending"]
 
 
+COUNT_JS = """(async () => {
+  app.graph.clear();
+  const n = LiteGraph.createNode("PromptFromFolder"); app.graph.add(n);
+  const w = (name) => n.widgets.find(x => x.name === name);
+  const box = () => w("selected").value;
+  const wait = async (pred) => { for (let i = 0; i < 50 && !pred(); i++) await new Promise(r => setTimeout(r, 100)); };
+  const set = (name, v) => { w(name).value = v; w(name).callback?.(v); };
+  const out = {};
+  set("folder", "examples"); await wait(() => box().includes("examples")); out.examples = box();
+  const folders = w("folder").options.values;
+  const parent = folders.find(f => folders.some(g => g.startsWith(f + "/")) && f !== "(root)");
+  if (parent) {
+    set("folder", parent); await wait(() => box().includes(parent)); out.parent_only = box().split("\\n")[0];
+    set("include_subfolders", true); await wait(() => box().includes("subfolders")); out.parent_with_subfolders = box().split("\\n")[0];
+  }
+  app.graph.remove(n);
+  return JSON.stringify(out);
+})()"""
+
+
 async def main():
     # This queues real (tiny) prompts; never mix them into someone's work.
     if not queue_is_empty():
@@ -148,6 +168,7 @@ async def main():
                 await asyncio.sleep(2)
                 print("seed control follows mode:", await ev(CONTROL_JS))
                 print("sequence restarts at the first file:", await ev(RESTART_JS))
+                print("file count shown before a run:", await ev(COUNT_JS))
                 r = json.loads(await ev(JS))
                 print("display box present:", r["has_box"], "| read-only:", r["readonly"])
                 print("inputs sent with the prompt:", r["sent"])

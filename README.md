@@ -27,6 +27,11 @@ is kept, so you can resume a sequence where you left off.
 | `prompt` | The file's text, ready for a CLIP Text Encode node's `text` input. |
 | `file` | The file's path within `input/prompts/`. |
 
+As soon as you pick a folder, before any run, the box on the node shows how
+many prompt files it holds, for example "8 prompt files in agerange/african:
+queue 8 runs to use each prompt once". The count includes subfolders when
+`include_subfolders` is on.
+
 After each run, a box on the node shows the file that was picked, its position
 (for example `2 of 12`), and the prompt. The box is display only: it is not sent
 with the prompt and is not saved with the workflow.

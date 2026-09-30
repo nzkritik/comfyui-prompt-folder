@@ -46,6 +46,33 @@ function restartSequence(node) {
   node.setDirtyCanvas?.(true, true);
 }
 
+// Shows how many prompt files the current folder holds, before any run, so
+// the user knows how many runs cover every prompt once.
+async function showCount(node) {
+  const folder = node.widgets?.find((w) => w.name === "folder")?.value;
+  const sub = !!node.widgets?.find((w) => w.name === "include_subfolders")?.value;
+  if (folder === undefined) return;
+  const ticket = (node._pfCountTicket = (node._pfCountTicket || 0) + 1);
+  let text;
+  try {
+    const res = await api.fetchApi(
+      `/prompt_folder/count?folder=${encodeURIComponent(folder)}&subfolders=${sub ? 1 : 0}`
+    );
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || res.statusText);
+    const where = (folder === "(root)" ? "input/prompts" : folder) + (sub ? " and its subfolders" : "");
+    const n = data.count;
+    text = n
+      ? `${n} prompt file${n === 1 ? "" : "s"} in ${where}\nQueue ${n} run${n === 1 ? "" : "s"} to use each prompt once.`
+      : `No .txt prompt files in ${where}.`;
+  } catch (e) {
+    text = `Could not count prompt files: ${e.message || e}`;
+  }
+  if (ticket !== node._pfCountTicket) return; // a newer change won the race
+  shownWidget(node).value = text;
+  node.setDirtyCanvas?.(true, true);
+}
+
 function afterChange(node, name, fn) {
   const w = node.widgets?.find((x) => x.name === name);
   if (!w) return;
@@ -188,8 +215,10 @@ app.registerExtension({
       syncControl(node, value);
       restartSequence(node);
     });
-    afterChange(node, "folder", () => restartSequence(node));
-    afterChange(node, "include_subfolders", () => restartSequence(node));
+    afterChange(node, "folder", () => { restartSequence(node); showCount(node); });
+    afterChange(node, "include_subfolders", () => { restartSequence(node); showCount(node); });
+    // After a saved workflow has put its values in (configure runs after this).
+    setTimeout(() => showCount(node), 0);
     // A node just added gets the default mode's control; a loaded one is
     // configured after this and keeps its saved value.
     syncControl(node, mode.value);
