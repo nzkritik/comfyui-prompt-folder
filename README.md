@@ -131,8 +131,14 @@ only ever lists and reads inside `input/prompts/`:
 
 ## Install
 
-Clone it into `custom_nodes`, or use ComfyUI-Manager's **Install via Git URL** with the
-repository address:
+From the Comfy Registry (once the listing is approved): search for **Prompt Folder** in
+ComfyUI-Manager, or run
+
+```bash
+comfy node install comfyui-prompt-folder
+```
+
+Or clone it into `custom_nodes` (ComfyUI-Manager's **Install via Git URL** works too):
 
 ```bash
 cd ComfyUI/custom_nodes
