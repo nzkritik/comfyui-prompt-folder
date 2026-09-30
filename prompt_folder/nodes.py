@@ -1,14 +1,18 @@
-"""Prompt From Folder: one prompt from a folder of .txt files, at random or in sequence.
+"""Prompt From Folder (load a prompt from a folder of .txt files, at random or in sequence)
+and Prompt To Folder (save a prompt as a numbered .txt file for it).
 
 Written against ComfyUI's V3 node API (comfy_api.latest).
 """
 
 import os
+import time
 
 import folder_paths
-from comfy_api.latest import io, ui
+from aiohttp import web
+from comfy_api.latest import io
+from server import PromptServer
 
-from . import prompts
+from . import prompts, saving
 
 CATEGORY = "utils/Prompt Folder"
 
@@ -66,4 +70,43 @@ class PromptFromFolder(io.ComfyNode):
         return io.NodeOutput(text, name, ui={"text": [label, text]})
 
 
-NODES = [PromptFromFolder]
+class PromptToFolder(io.ComfyNode):
+    @classmethod
+    def define_schema(cls):
+        return io.Schema(
+            node_id="PromptToFolder",
+            display_name="Prompt To Folder",
+            category=CATEGORY,
+            description=("Save a prompt as a numbered .txt file in a folder under ComfyUI/input/prompts, "
+                         "ready for Prompt From Folder. Never overwrites: name_00001.txt, name_00002.txt, ..."),
+            is_output_node=True,
+            inputs=[
+                io.String.Input("prompt", force_input=True, tooltip="The text to save."),
+                io.String.Input("folder", default="saved",
+                                tooltip=("A folder under ComfyUI/input/prompts, e.g. 'saved' or 'saved/portraits'. "
+                                         "Created if missing. Use Browse to pick an existing one.")),
+                io.String.Input("name", optional=True, force_input=True,
+                                tooltip=("File name prefix, numbered like Save Image (name_00001.txt). "
+                                         "A '/' makes subfolders. Defaults to 'prompt'.")),
+            ],
+            outputs=[io.String.Output("file")],
+        )
+
+    @classmethod
+    def fingerprint_inputs(cls, **kwargs):
+        # A save node: write on every run, even when the prompt is unchanged.
+        return time.time_ns()
+
+    @classmethod
+    def execute(cls, prompt, folder, name=None):
+        rel = saving.save_prompt(prompts_root(), folder, name, prompt)
+        return io.NodeOutput(rel, ui={"text": [rel]})
+
+
+NODES = [PromptFromFolder, PromptToFolder]
+
+
+# Browse dialog: the folders under input/prompts, and nothing else.
+@PromptServer.instance.routes.get("/prompt_folder/dirs")
+async def list_prompt_dirs(request):
+    return web.json_response({"root": "input/prompts", "dirs": saving.list_dirs(prompts_root())})

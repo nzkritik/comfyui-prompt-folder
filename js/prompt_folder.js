@@ -9,9 +9,11 @@
 //    from the node's UI output after each run. It is display only: never sent
 //    with the prompt and not saved with the workflow.
 import { app } from "../../scripts/app.js";
+import { api } from "../../scripts/api.js";
 import { ComfyWidgets } from "../../scripts/widgets.js";
 
 const NODE = "PromptFromFolder";
+const SAVER = "PromptToFolder";
 const CONTROL_FOR = { random: "randomize", sequence: "increment" };
 const SHOWN = "selected";
 
@@ -55,7 +57,7 @@ function afterChange(node, name, fn) {
   };
 }
 
-function shownWidget(node) {
+function shownWidget(node, placeholder = "The picked prompt appears here after a run.") {
   let w = node.widgets?.find((x) => x.name === SHOWN);
   if (w) return w;
   w = ComfyWidgets.STRING(node, SHOWN, ["STRING", { multiline: true }], app).widget;
@@ -64,28 +66,117 @@ function shownWidget(node) {
   w.value = "";
   if (w.inputEl) {
     w.inputEl.readOnly = true;
-    w.inputEl.placeholder = "The picked prompt appears here after a run.";
+    w.inputEl.placeholder = placeholder;
     w.inputEl.style.opacity = 0.85;
   }
   return w;
+}
+
+// Browse dialog for Prompt To Folder. The server only ever lists folders under
+// input/prompts, so this can offer nothing outside that tree.
+async function browseFolders(current) {
+  let dirs = [];
+  try {
+    const res = await api.fetchApi("/prompt_folder/dirs");
+    dirs = (await res.json()).dirs || [];
+  } catch (e) {
+    alert("Could not list the prompt folders: " + e);
+    return null;
+  }
+  return new Promise((resolve) => {
+    const overlay = document.createElement("div");
+    Object.assign(overlay.style, {
+      position: "fixed", inset: "0", background: "rgba(0,0,0,0.5)", zIndex: 10000,
+      display: "flex", alignItems: "center", justifyContent: "center",
+    });
+    const box = document.createElement("div");
+    Object.assign(box.style, {
+      background: "var(--comfy-menu-bg, #222)", color: "var(--fg-color, #ddd)",
+      border: "1px solid var(--border-color, #444)", borderRadius: "8px", padding: "14px",
+      width: "min(520px, 90vw)", maxHeight: "70vh", display: "flex", flexDirection: "column", gap: "8px",
+      fontFamily: "sans-serif", fontSize: "14px",
+    });
+    const title = document.createElement("div");
+    title.textContent = "Choose a folder in input/prompts";
+    title.style.fontWeight = "bold";
+    const filter = document.createElement("input");
+    filter.placeholder = "Filter, or type a new folder name and press Enter";
+    Object.assign(filter.style, { padding: "6px", background: "var(--comfy-input-bg, #111)",
+      color: "inherit", border: "1px solid var(--border-color, #444)", borderRadius: "4px" });
+    const list = document.createElement("div");
+    Object.assign(list.style, { overflowY: "auto", flex: "1", minHeight: "120px" });
+    const close = (value) => { overlay.remove(); resolve(value); };
+    const render = () => {
+      list.replaceChildren();
+      const q = filter.value.trim().toLowerCase();
+      const shown = ["(root)", ...dirs].filter((d) => !q || d.toLowerCase().includes(q));
+      for (const d of shown) {
+        const row = document.createElement("div");
+        row.textContent = d === "(root)" ? "(input/prompts itself)" : d;
+        Object.assign(row.style, { padding: "5px 8px", cursor: "pointer", borderRadius: "4px",
+          background: d === current ? "var(--comfy-input-bg, #333)" : "" });
+        row.onmouseenter = () => (row.style.background = "var(--border-color, #444)");
+        row.onmouseleave = () => (row.style.background = d === current ? "var(--comfy-input-bg, #333)" : "");
+        row.onclick = () => close(d === "(root)" ? "" : d);
+        list.appendChild(row);
+      }
+      if (!shown.length) {
+        const empty = document.createElement("div");
+        empty.textContent = q ? `Press Enter to use a new folder "${filter.value.trim()}"` : "No folders yet.";
+        empty.style.opacity = 0.7;
+        list.appendChild(empty);
+      }
+    };
+    filter.oninput = render;
+    filter.onkeydown = (e) => {
+      if (e.key === "Escape") close(null);
+      if (e.key === "Enter" && filter.value.trim()) close(filter.value.trim());
+    };
+    const cancel = document.createElement("button");
+    cancel.textContent = "Cancel";
+    cancel.onclick = () => close(null);
+    overlay.onclick = (e) => { if (e.target === overlay) close(null); };
+    box.append(title, filter, list, cancel);
+    overlay.appendChild(box);
+    document.body.appendChild(overlay);
+    render();
+    filter.focus();
+  });
+}
+
+function setupSaver(node) {
+  const folder = node.widgets?.find((w) => w.name === "folder");
+  if (folder && !node.widgets.find((w) => w.name === "browse")) {
+    node.addWidget("button", "browse", "Browse…", async () => {
+      const picked = await browseFolders(folder.value);
+      if (picked === null) return;
+      folder.value = picked;
+      folder.callback?.(picked);
+      node.setDirtyCanvas?.(true, true);
+    }, { serialize: false });
+  }
+  shownWidget(node, "Where the prompt was saved appears here after a run.");
+  node.setSize([Math.max(node.size[0], 380), Math.max(node.size[1], 230)]);
 }
 
 app.registerExtension({
   name: "prompt_folder.node",
 
   async beforeRegisterNodeDef(nodeType, nodeData) {
-    if (nodeData.name !== NODE) return;
+    if (nodeData.name !== NODE && nodeData.name !== SAVER) return;
+    const saver = nodeData.name === SAVER;
     const onExecuted = nodeType.prototype.onExecuted;
     nodeType.prototype.onExecuted = function (message) {
       onExecuted?.apply(this, arguments);
       const [label, text] = message?.text ?? [];
       if (label === undefined) return;
-      shownWidget(this).value = `${label}\n\n${text ?? ""}`;
+      shownWidget(this).value = saver ? `Saved: input/prompts/${label}` : `${label}\n\n${text ?? ""}`;
       this.setDirtyCanvas?.(true, true);
     };
   },
 
   nodeCreated(node) {
+    if (node.comfyClass === SAVER) return setupSaver(node);
     if (node.comfyClass !== NODE) return;
     shownWidget(node);
     // Room for the file line plus a few lines of prompt. A loaded workflow

@@ -1,7 +1,7 @@
 [project]
 name = "comfyui-prompt-folder"
 description = "Load prompts from a folder of .txt files in ComfyUI, at random or in sequence, and see which one was picked."
-version = "0.1.0"
+version = "0.2.0"
 license = { file = "LICENSE" }
 requires-python = ">=3.10"
 dependencies = []

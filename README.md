@@ -1,7 +1,8 @@
 # Prompt Folder
 
-A ComfyUI node that loads one prompt from a folder of `.txt` files, **at random
-or in sequence**, and shows you which prompt it picked.
+ComfyUI nodes for folders of `.txt` prompts. **Prompt From Folder** loads one prompt,
+at random or in sequence, and shows you which prompt it picked. **Prompt To Folder**
+saves prompts into those folders.
 
 ## Prompt From Folder
 
@@ -42,6 +43,31 @@ with the prompt and is not saved with the workflow.
 
 If you edit a prompt file, the node notices and runs again, even with a fixed
 seed.
+
+## Prompt To Folder
+
+Saves a prompt as a numbered `.txt` file, ready for Prompt From Folder to load
+later.
+
+| Input | What it does |
+| --- | --- |
+| `prompt` | The text to save. Connect the same string you send to CLIP Text Encode. |
+| `folder` | A folder under `ComfyUI/input/prompts/`. Type a name (a new one is created), or use **Browse…** to pick an existing one. |
+| `name` *(optional)* | The file name prefix, numbered like Save Image: `name_00001.txt`, `name_00002.txt`, and so on. A `/` in the name makes subfolders. Defaults to `prompt`. |
+
+It never overwrites a file; it takes the next free number instead. It saves on
+every run, even when the prompt has not changed. A box on the node shows where
+the last prompt was saved, and the `file` output gives the same path.
+
+Everything is written inside `input/prompts/`:
+
+- `..` is refused.
+- Absolute paths such as `/etc` become ordinary subfolders under
+  `input/prompts/`.
+- Characters that are unsafe in file names, including `:`, become `_`.
+- Files are created exclusively and without following symlinks, so a symlink
+  planted at the target is never written through.
+- The Browse dialog lists only folders under `input/prompts/`.
 
 ## Example workflow
 
