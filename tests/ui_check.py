@@ -120,7 +120,8 @@ async def main():
         async with aiohttp.ClientSession() as s:
             for _ in range(50):
                 try:
-                    tabs = await (await s.get("http://127.0.0.1:9334/json")).json(); break
+                    tabs = await (await s.get("http://127.0.0.1:9334/json")).json()
+                    break
                 except Exception:
                     await asyncio.sleep(0.2)
             ws_url = next(t for t in tabs if t["type"] == "page")["webSocketDebuggerUrl"]
@@ -130,7 +131,8 @@ async def main():
                 async def send(method, **params):
                     nonlocal mid
                     mid += 1
-                    f = asyncio.get_event_loop().create_future(); pending[mid] = f
+                    f = asyncio.get_event_loop().create_future()
+                    pending[mid] = f
                     await ws.send_str(json.dumps({"id": mid, "method": method, "params": params}))
                     return (await f).get("result", {})
 
@@ -140,7 +142,8 @@ async def main():
                         if "id" in d and d["id"] in pending:
                             pending.pop(d["id"]).set_result(d)
                         elif d.get("method") == "Fetch.requestPaused":
-                            p = d["params"]; req = p["request"]
+                            p = d["params"]
+                            req = p["request"]
                             if req["method"] != "GET" and any(x in req["url"] for x in ("/settings", "/userdata")):
                                 asyncio.ensure_future(send("Fetch.failRequest", requestId=p["requestId"], errorReason="BlockedByClient"))
                             else:
@@ -161,7 +164,8 @@ async def main():
 
                 for _ in range(120):
                     try:
-                        if await ev("!!(window.app && app.graph && window.LiteGraph)"): break
+                        if await ev("!!(window.app && app.graph && window.LiteGraph)"):
+                            break
                     except Exception:
                         pass
                     await asyncio.sleep(0.5)
@@ -180,7 +184,8 @@ async def main():
                     if "prompt_folder" in e or "PromptFromFolder" in e:
                         print("JS error:", e)
     finally:
-        proc.terminate(); proc.wait()
+        proc.terminate()
+        proc.wait()
 
 
 asyncio.run(main())
