@@ -4,6 +4,37 @@ ComfyUI nodes for folders of `.txt` prompts. **Prompt From Folder** loads one pr
 at random or in sequence, and shows you which prompt it picked. **Prompt To Folder**
 saves prompts into those folders.
 
+![Prompt From Folder feeding CLIP Text Encode and Prompt To Folder](screenshot.png)
+
+## Who this is for
+
+- You keep prompts as text files, one per file, and want to work through a
+  folder of them: every prompt once, in order, or a random one each run.
+- You want to keep the prompts that worked, for example the output of a prompt
+  enhancer, and bring them back later as a folder you can loop over.
+
+It works with any model: the output is plain text for a CLIP Text Encode node.
+
+How it differs from other prompt-from-folder packs:
+
+- The node shows how many prompts a folder holds before you run, and which one
+  it picked after the run.
+- Sequence mode restarts at the first file when you change folder.
+- There is a matching node that saves prompts.
+- Everything stays inside `ComfyUI/input/prompts/`, with the protections listed
+  under [Safety](#safety).
+
+## Read before you run
+
+- **Prompt To Folder writes files.** It creates folders and numbered `.txt`
+  files under `ComfyUI/input/prompts/`, on every run. It never overwrites an
+  existing file, and nothing is written outside that folder.
+- **Your ComfyUI may be reachable from other machines.** If you start ComfyUI
+  with `--listen`, anyone who can reach it can use these nodes, like any other
+  node. Two small routes, used by the Browse dialog and the file count, also let
+  them list the folder names under `input/prompts/`. They can't read or write
+  anything outside that folder.
+
 ## Prompt From Folder
 
 | Input | What it does |
@@ -20,7 +51,9 @@ In `sequence` mode the seed is the position in the list, starting at 0. It goes
 back to 0, the first file, whenever you switch the mode to `sequence`, pick
 another folder, or toggle `include_subfolders`, so a sequence never starts part
 way through a folder. A seed you type in yourself, or one saved in a workflow,
-is kept, so you can resume a sequence where you left off.
+is kept, so you can resume a sequence where you left off. The restart is done
+by the ComfyUI frontend. If you drive the node through the API without it, set
+`seed` to 0 yourself to start at the first file.
 
 | Output | |
 | --- | --- |
@@ -98,8 +131,20 @@ only ever lists and reads inside `input/prompts/`:
 
 ## Install
 
-Clone into `ComfyUI/custom_nodes/` and restart ComfyUI. There are no Python
-dependencies.
+Clone it into `custom_nodes`, or use ComfyUI-Manager's **Install via Git URL** with the
+repository address:
+
+```bash
+cd ComfyUI/custom_nodes
+git clone https://github.com/nzkritik/comfyui-prompt-folder
+```
+
+Then restart ComfyUI. There are no Python dependencies. The nodes use ComfyUI's
+V3 node API, so they need ComfyUI **v0.3.48 or later**. They were developed on
+v0.37.0.
+
+Prompt folders live in `ComfyUI/input/prompts/`, which is created on first load.
+Put `.txt` files in folders there, or symlink existing folders in.
 
 ## Tests
 

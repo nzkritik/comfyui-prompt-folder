@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <!-- Prompt Folder: a folder of prompt lines, with arrows out (load) and in (save). -->
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1f2733"/>
+      <stop offset="1" stop-color="#11161d"/>
+    </linearGradient>
+    <linearGradient id="folder" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f2b84b"/>
+      <stop offset="1" stop-color="#d9912a"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="400" rx="84" fill="url(#bg)"/>
+
+  <!-- folder back and tab -->
+  <path d="M70 118 Q70 100 88 100 H160 L182 124 H312 Q330 124 330 142 V300 Q330 318 312 318 H88 Q70 318 70 300 Z"
+        fill="#b8761f"/>
+  <!-- a page of prompt text sticking out -->
+  <g transform="rotate(-4 200 190)">
+    <rect x="108" y="96" width="184" height="170" rx="12" fill="#eef2f7"/>
+    <rect x="130" y="124" width="140" height="12" rx="6" fill="#7aa2d6"/>
+    <rect x="130" y="150" width="112" height="12" rx="6" fill="#9fb3c8"/>
+    <rect x="130" y="176" width="128" height="12" rx="6" fill="#9fb3c8"/>
+    <rect x="130" y="202" width="96" height="12" rx="6" fill="#9fb3c8"/>
+  </g>
+  <!-- folder front -->
+  <path d="M62 176 Q60 160 78 160 H322 Q340 160 338 176 L326 302 Q324 318 306 318 H94 Q76 318 74 302 Z"
+        fill="url(#folder)"/>
+
+  <!-- load: arrow out (up-right), save: arrow in (down-left) -->
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="18">
+    <path d="M232 262 L292 202" stroke="#2f855a"/>
+    <path d="M254 202 H292 V240" stroke="#2f855a"/>
+    <path d="M168 214 L108 274" stroke="#2b6cb0"/>
+    <path d="M146 274 H108 V236" stroke="#2b6cb0"/>
+  </g>
+</svg>

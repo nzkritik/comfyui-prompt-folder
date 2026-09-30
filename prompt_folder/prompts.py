@@ -58,25 +58,31 @@ def _scan(root):
     return found
 
 
-def list_folders(root):
-    """Every folder holding prompts, and every folder above one, for the dropdown."""
+def _folders_of(scan):
+    """Every folder holding prompts, and every folder above one."""
     folders = set()
-    for folder in _scan(root):
+    for folder in scan:
         while folder:
             folders.add(folder)
             folder = folder.rsplit("/", 1)[0] if "/" in folder else ""
-    return [ROOT_FOLDER] + sorted(folders, key=natural_key)
+    return folders
+
+
+def list_folders(root):
+    """The dropdown: (root) first, then every prompt folder in natural order."""
+    return [ROOT_FOLDER] + sorted(_folders_of(_scan(root)), key=natural_key)
 
 
 def prompt_files(root, folder, include_subfolders):
     """The prompt files a pick chooses from, as paths relative to root, in natural order.
 
     Raises ValueError for a folder that is not one list_folders would offer.
+    One scan serves both that check and the file list.
     """
-    target = "" if folder == ROOT_FOLDER else folder.strip("/")
     scan = _scan(root)
-    if folder != ROOT_FOLDER and folder not in list_folders(root):
+    if folder != ROOT_FOLDER and folder not in _folders_of(scan):
         raise ValueError(f"'{folder}' is not a prompt folder under {root}")
+    target = "" if folder == ROOT_FOLDER else folder.strip("/")
     out = []
     for f, files in scan.items():
         if f == target or (include_subfolders and (target == "" or f.startswith(target + "/"))):

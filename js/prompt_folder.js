@@ -174,13 +174,15 @@ async function browseFolders(current) {
 function setupSaver(node) {
   const folder = node.widgets?.find((w) => w.name === "folder");
   if (folder && !node.widgets.find((w) => w.name === "browse")) {
-    node.addWidget("button", "browse", "Browse…", async () => {
+    const button = node.addWidget("button", "browse", "Browse…", async () => {
       const picked = await browseFolders(folder.value);
       if (picked === null) return;
       folder.value = picked;
       folder.callback?.(picked);
       node.setDirtyCanvas?.(true, true);
     }, { serialize: false });
+    // The frontend draws a button's name unless it has a label.
+    button.label = "Browse…";
   }
   shownWidget(node, "Where the prompt was saved appears here after a run.");
   node.setSize([Math.max(node.size[0], 380), Math.max(node.size[1], 230)]);

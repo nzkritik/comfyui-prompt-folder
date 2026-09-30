@@ -97,3 +97,10 @@ def test_saved_prompt_is_readable_by_the_loader(tmp_path):
     s.save_prompt(tmp_path, "saved", "a", "second")
     files = prompts.prompt_files(tmp_path, "saved", False)
     assert [prompts.read_prompt(tmp_path, f) for f in files] == ["first", "second"]
+
+
+@pytest.mark.parametrize("name, expect", [("CON", "_CON"), ("nul", "_nul"), ("com1", "_com1"), ("Lpt9.txt", "_Lpt9.txt"),
+                                          ("console", "console"), ("aux2", "aux2")])
+def test_windows_reserved_names(tmp_path, name, expect):
+    assert s.clean_parts(f"saved/{name}") == ["saved", expect]
+

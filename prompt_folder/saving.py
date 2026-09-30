@@ -34,6 +34,8 @@ DEFAULT_NAME = "prompt"
 DIGITS = 5
 
 _UNSAFE = re.compile(r"[^\w .,+()@#&'!=~-]", re.UNICODE)
+# Names Windows refuses for any file or folder, with or without an extension.
+_WINDOWS_RESERVED = re.compile(r"^(con|prn|aux|nul|com[1-9]|lpt[1-9])(\.|$)", re.IGNORECASE)
 
 
 def clean_parts(value):
@@ -48,6 +50,8 @@ def clean_parts(value):
         part = _UNSAFE.sub("_", part.replace(":", "_")).strip(" .")
         if not part:
             continue
+        if _WINDOWS_RESERVED.match(part):
+            part = "_" + part
         parts.append(part[:MAX_COMPONENT])
     if len(parts) > MAX_DEPTH:
         raise ValueError(f"too many folder levels (at most {MAX_DEPTH})")
